@@ -10,12 +10,22 @@ const defaultFilters: BookFiltersState = {
 
 describe("filterBooks", () => {
   it("matches title and author searches without depending on letter case", () => {
-    const results = filterBooks(books, {
+    const lowercaseResults = filterBooks(books, {
       ...defaultFilters,
       searchTerm: "hobbit"
     });
+    const uppercaseResults = filterBooks(books, {
+      ...defaultFilters,
+      searchTerm: "HOBBIT"
+    });
+    const authorResults = filterBooks(books, {
+      ...defaultFilters,
+      searchTerm: "TOLKIEN"
+    });
 
-    expect(results.map((book) => book.title)).toEqual(["The Hobbit"]);
+    expect(lowercaseResults.map((book) => book.title)).toEqual(["The Hobbit"]);
+    expect(uppercaseResults).toEqual(lowercaseResults);
+    expect(authorResults.map((book) => book.title)).toEqual(["The Hobbit"]);
   });
 
   it("filters by genre and reading status together", () => {
