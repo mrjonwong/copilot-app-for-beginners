@@ -1,5 +1,6 @@
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { filterBooks, type BookFiltersState } from "../App";
+import App, { filterBooks, type BookFiltersState } from "../App";
 import { books } from "../data/books";
 
 const defaultFilters: BookFiltersState = {
@@ -26,5 +27,17 @@ describe("filterBooks", () => {
     });
 
     expect(results.map((book) => book.title)).toEqual(["The Night Circus"]);
+  });
+
+  it("shows guidance for changing the search term, genre, or reading status when there are no matches", () => {
+    render(<App />);
+
+    fireEvent.change(screen.getByRole("searchbox"), {
+      target: { value: "zzzz-no-match" }
+    });
+
+    expect(
+      screen.getByText("Try a different search term, genre, or reading status.")
+    ).toBeTruthy();
   });
 });
